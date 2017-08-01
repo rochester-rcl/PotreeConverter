@@ -13,6 +13,7 @@ cd /path/to/LAStools/LASZip
 mkdir build
 cd build
 emcmake cmake -DCMAKE_BUILD_TYPE=Release ..
+make
 ```
 Compile Boost for Emscripten following the instructions [here](https://github.com/arielm/chronotext-boost)
 
@@ -25,4 +26,5 @@ cd build
 emcmake cmake -DCMAKE_BUILD_TYPE=Release \
 -DLASZIP_INCLUDE_DIRS=/path/to/LASZip/dll \
 -DLASZIP_LIBRARY=/path/to/LASZip/build/src/liblaszip.bc ..
+make
 ```
