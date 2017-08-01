@@ -4,14 +4,14 @@
 #include <iostream>
 #include <vector>
 
-#include <experimental/filesystem>
+#include <boost/filesystem.hpp>
 #include "laszip_api.h"
 
 #include "LASPointReader.h"
 #include "stuff.h"
 
 
-namespace fs = std::experimental::filesystem;
+namespace fs = boost::filesystem;
 
 using std::ifstream;
 using std::cout;

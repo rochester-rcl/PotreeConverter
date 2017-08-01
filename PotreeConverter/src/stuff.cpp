@@ -36,11 +36,11 @@ using std::map;
 namespace Potree{
 
 /**
- *   y 
+ *   y
  *   |-z
  *   |/
  *   O----x
- *    
+ *
  *   3----7
  *  /|   /|
  * 2----6 |
@@ -78,11 +78,11 @@ AABB childAABB(const AABB &aabb, const int &index){
 
 
 /**
- *   y 
+ *   y
  *   |-z
  *   |/
  *   O----x
- *    
+ *
  *   3----7
  *  /|   /|
  * 2----6 |
@@ -138,7 +138,7 @@ string toUpper(string str){
 
 // http://stackoverflow.com/questions/8593608/how-can-i-copy-a-directory-using-boost-filesystem
 bool copyDir(fs::path source, fs::path destination){
-	
+
     try{
         // Check whether the function call is valid
         if(!fs::exists(source) || !fs::is_directory(source) ) {
@@ -172,7 +172,7 @@ bool copyDir(fs::path source, fs::path destination){
                 }
             }else{
                 // Found file: Copy
-				fs::copy_file(current, destination / current.filename(), fs::copy_options::overwrite_existing);
+				fs::copy_file(current, destination / current.filename(), fs::copy_option::overwrite_if_exists);
             }
         }catch(fs::filesystem_error const & e){
             std:: cerr << e.what() << '\n';

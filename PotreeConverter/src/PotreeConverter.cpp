@@ -1,6 +1,6 @@
 
 
-#include <experimental/filesystem>
+#include <boost/filesystem.hpp>
 
 #include "rapidjson/document.h"
 #include "rapidjson/prettywriter.h"
@@ -45,7 +45,7 @@ using std::chrono::milliseconds;
 using std::chrono::duration_cast;
 using std::fstream;
 
-namespace fs = std::experimental::filesystem;
+namespace fs = boost::filesystem;
 
 namespace Potree{
 
@@ -93,8 +93,8 @@ void PotreeConverter::prepare(){
 				fs::path pDirectoryEntry = it->path();
 				if(fs::is_regular_file(pDirectoryEntry)){
 					string filepath = pDirectoryEntry.string();
-					if(iEndsWith(filepath, ".las") 
-						|| iEndsWith(filepath, ".laz") 
+					if(iEndsWith(filepath, ".las")
+						|| iEndsWith(filepath, ".laz")
 						|| iEndsWith(filepath, ".xyz")
 						|| iEndsWith(filepath, ".pts")
 						|| iEndsWith(filepath, ".ptx")
@@ -134,7 +134,7 @@ AABB PotreeConverter::calculateAABB(){
 		for(string source : sources){
 
 			PointReader *reader = createPointReader(source, pointAttributes);
-			
+
 			AABB lAABB = reader->getAABB();
 			aabb.update(lAABB.min);
 			aabb.update(lAABB.max);
@@ -188,7 +188,7 @@ void PotreeConverter::generatePage(string name){
 				}else{
 					out << "\t\t" << "viewer.setBackground(\"gradient\"); // [\"skybox\", \"gradient\", \"black\", \"white\"];\n";
 				}
-				
+
 				string descriptionEscaped = string(description);
 				std::replace(descriptionEscaped.begin(), descriptionEscaped.end(), '`', '\'');
 
@@ -196,7 +196,7 @@ void PotreeConverter::generatePage(string name){
 			}else{
 				out << line << endl;
 			}
-			
+
 		}
 
 		in.close();
@@ -204,7 +204,7 @@ void PotreeConverter::generatePage(string name){
 	}
 
 	// change lasmap template
-	if(!this->projection.empty()){ 
+	if(!this->projection.empty()){
 		ifstream in( mapTemplateSourcePath );
 		ofstream out( mapTemplateTargetPath );
 
@@ -215,7 +215,7 @@ void PotreeConverter::generatePage(string name){
 			}else{
 				out << line << endl;
 			}
-			
+
 		}
 
 		in.close();
@@ -271,8 +271,8 @@ void writeSources(string path, vector<string> sourceFilenames, vector<int> numPo
 		Value jBounds(rapidjson::kObjectType);
 
 		{
-			Value bbMin(rapidjson::kObjectType);	
-			Value bbMax(rapidjson::kObjectType);	
+			Value bbMin(rapidjson::kObjectType);
+			Value bbMax(rapidjson::kObjectType);
 
 			bbMin.SetArray();
 			bbMin.PushBack(boundingBox.min.x, d.GetAllocator());
@@ -297,8 +297,8 @@ void writeSources(string path, vector<string> sourceFilenames, vector<int> numPo
 
 	Value jBoundingBox(rapidjson::kObjectType);
 	{
-		Value bbMin(rapidjson::kObjectType);	
-		Value bbMax(rapidjson::kObjectType);	
+		Value bbMin(rapidjson::kObjectType);
+		Value bbMax(rapidjson::kObjectType);
 
 		bbMin.SetArray();
 		bbMin.PushBack(bb.min.x, d.GetAllocator());
@@ -322,7 +322,7 @@ void writeSources(string path, vector<string> sourceFilenames, vector<int> numPo
 	//PrettyWriter<StringBuffer> writer(buffer);
 	Writer<StringBuffer> writer(buffer);
 	d.Accept(writer);
-	
+
 	if(!fs::exists(fs::path(path))){
 		fs::path pcdir(path);
 		fs::create_directories(pcdir);
@@ -431,15 +431,15 @@ void PotreeConverter::convert(){
 			}
 			if((pointsProcessed % (10'000'000)) == 0){
 				cout << "FLUSHING: ";
-			
+
 				auto start = high_resolution_clock::now();
-			
+
 				writer->flush();
-			
+
 				auto end = high_resolution_clock::now();
 				long long duration = duration_cast<milliseconds>(end-start).count();
 				float seconds = duration / 1'000.0f;
-			
+
 				cout << seconds << "s" << endl;
 			}
 
@@ -450,9 +450,9 @@ void PotreeConverter::convert(){
 		reader->close();
 		delete reader;
 
-		
+
 	}
-	
+
 	cout << "closing writer" << endl;
 	writer->flush();
 	writer->close();
@@ -465,7 +465,7 @@ void PotreeConverter::convert(){
 	auto end = high_resolution_clock::now();
 	long long duration = duration_cast<milliseconds>(end-start).count();
 
-	
+
 	cout << endl;
 	cout << "conversion finished" << endl;
 	cout << pointsProcessed << " points were processed and " << writer->numAccepted << " points ( " << percent << "% ) were written to the output. " << endl;

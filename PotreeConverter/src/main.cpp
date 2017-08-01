@@ -11,9 +11,9 @@
 #include "PotreeException.h"
 
 #include "arguments.hpp"
-#include <experimental/filesystem>
+#include <boost/filesystem.hpp>
 
-namespace fs = std::experimental::filesystem;
+namespace fs = boost::filesystem;
 
 using std::string;
 using std::cout;
@@ -123,7 +123,7 @@ PotreeArguments parseArguments(int argc, char **argv){
 	a.format = args.get("input-format").as<string>();
 	a.colorRange = args.get("color-range").as<vector<double>>();
 	a.intensityRange = args.get("intensity-range").as<vector<double>>();
-	
+
 	if (args.has("output-format")) {
 		string of = args.get("output-format").as<string>("BINARY");
 
@@ -147,7 +147,7 @@ PotreeArguments parseArguments(int argc, char **argv){
 	}
 
 	a.scale = args.get("scale").as<double>(0.0);
-	
+
 	if (args.has("aabb")) {
 		string strAABB = args.get("aabb").as<string>();
 		vector<double> aabbValues;
@@ -221,10 +221,10 @@ PotreeArguments parseArguments(int argc, char **argv){
 		exit(1);
 	}
 
-	// set default parameters 
+	// set default parameters
 	fs::path pSource(a.source[0]);
 	a.outdir = args.has("outdir") ? args.get("outdir").as<string>() : pSource.generic_string() + "_converted";
-	
+
 	if (a.diagonalFraction != 0) {
 		a.spacing = 0;
 	}else if(a.spacing == 0){
@@ -268,7 +268,7 @@ void printArguments(PotreeArguments &a){
 
 int main(int argc, char **argv){
 	cout.imbue(std::locale(""));
-	
+
 	try{
 		PotreeArguments a = parseArguments(argc, argv);
 		printArguments(a);
@@ -301,7 +301,6 @@ int main(int argc, char **argv){
 		cout << "ERROR: " << e.what() << endl;
 		return 1;
 	}
-	
+
 	return 0;
 }
-
