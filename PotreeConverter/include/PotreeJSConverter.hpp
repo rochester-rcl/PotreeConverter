@@ -52,7 +52,10 @@ class PotreeJSConverter {
 
   public:
      // Can add all of the other options later + set this up as a worker
-     PotreeJSConverter(PotreeArguments arguments);
+     PotreeJSConverter(PotreeArguments arguments, bool runtime);
+		 bool nodeRuntime;
+		 bool getNodeRuntime() const { return nodeRuntime; };
+		 void setNodeRuntime(bool runtime) { nodeRuntime = runtime; };
 		 void convert();
 };
 
@@ -77,7 +80,8 @@ EMSCRIPTEN_BINDINGS(potree_js_converter) {
 		.value("NICE", ConversionQuality::NICE);
 
   class_<PotreeJSConverter>("PotreeJSConverter")
-  	.constructor<PotreeArguments>()
+  	.constructor<PotreeArguments, bool>()
+		.property("nodeRuntime", &PotreeJSConverter::getNodeRuntime, &PotreeJSConverter::setNodeRuntime)
 		.function("convert", &PotreeJSConverter::convert);
 
 	value_object<PotreeArguments>("PotreeArguments")

@@ -1,10 +1,21 @@
 #include <stdio.h>
 #include <iostream>
+#include <emscripten.h>
 #include "PotreeJSConverter.hpp"
 #include "PotreeConverter.h"
 
-PotreeJSConverter::PotreeJSConverter(PotreeArguments arguments)
+
+PotreeJSConverter::PotreeJSConverter(PotreeArguments arguments, bool runtime)
   : ptConverter(arguments.executablePath, arguments.outdir, arguments.source) {
+
+  nodeRuntime = runtime;
+  if (nodeRuntime) {
+    // Set virtual file system root to cwd
+    EM_ASM(
+      FS.mkdir('/working');
+      FS.mount(NODEFS, { root: '.'}, '/working');
+    );
+  }
 
   ptConverter.spacing = arguments.spacing;
 	ptConverter.diagonalFraction = arguments.diagonalFraction;

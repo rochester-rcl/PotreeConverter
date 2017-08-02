@@ -51,8 +51,13 @@ namespace Potree{
 
 PointReader *PotreeConverter::createPointReader(string path, PointAttributes pointAttributes){
 	PointReader *reader = NULL;
+	cout << "PATH IS:" << path << endl;
+	bool ext = iEndsWith(path, ".las");
+	cout << ext << endl;
 	if(iEndsWith(path, ".las") || iEndsWith(path, ".laz")){
-		reader = new LASPointReader(path);
+		// Absolutely no idea why ".ply" is evaluating as ".las" but I just want to see if I can get this to work
+		// reader - new LASPointReader
+		reader = new PlyPointReader(path);
 	}else if(iEndsWith(path, ".ptx")){
 		reader = new PTXPointReader(path);
 	}else if(iEndsWith(path, ".ply")){
@@ -392,7 +397,7 @@ void PotreeConverter::convert(){
 		cout << "READING:  " << source << endl;
 
 		PointReader *reader = createPointReader(source, pointAttributes);
-
+		cout << "reader initialized" << endl;
 		boundingBoxes.push_back(reader->getAABB());
 		numPoints.push_back(reader->numPoints());
 		sourceFilenames.push_back(fs::path(source).filename().string());
@@ -407,7 +412,6 @@ void PotreeConverter::convert(){
 
 		while(reader->readNextPoint()){
 			pointsProcessed++;
-
 			Point p = reader->getPoint();
 			writer->add(p);
 
