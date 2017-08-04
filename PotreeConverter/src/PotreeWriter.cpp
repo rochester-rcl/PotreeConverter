@@ -539,9 +539,8 @@ void PotreeWriter::processStore(){
 	vector<Point> st = store;
 	store = vector<Point>();
 
-	waitUntilProcessed();
+	// waitUntilProcessed();
 
-	storeThread = thread([this, st]{
 		for(Point p : st){
 			PWNode *acceptedBy = root->add(p);
 			if(acceptedBy != NULL){
@@ -551,15 +550,14 @@ void PotreeWriter::processStore(){
 				numAccepted++;
 			}
 		}
-	});
 }
 
 void PotreeWriter::flush(){
 	processStore();
 
-	if(storeThread.joinable()){
+	/*if(storeThread.joinable()){
 		storeThread.join();
-	}
+	}*/
 
 	//auto start = high_resolution_clock::now();
 

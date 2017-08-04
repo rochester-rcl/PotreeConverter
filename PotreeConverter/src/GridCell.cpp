@@ -47,7 +47,6 @@ void GridCell::add(Vector3<double> p){
 
 bool GridCell::isDistant(const Vector3<double> &p, const double &squaredSpacing) const {
 	for(const Vector3<double> &point : points){
-		
 		if(p.squaredDistanceTo(point) < squaredSpacing){
 			return false;
 		}

@@ -46,11 +46,11 @@ SOURCE_GROUP("lib\\arguments" FILES ${lib_argument_files})
 add_executable(PotreeConverter ${files} ${lib_rapidjson_files} ${lib_argument_files})
 
 target_link_libraries(PotreeConverter ${LASZIP_LIBRARY})
-set_target_properties(PotreeConverter PROPERTIES LINK_FLAGS "--bind -s EXPORT_ALL=1 -s LINKABLE=1 -O3 -I${BOOST_EMSCRIPTEN_INCLUDE_DIR} -L${BOOST_EMSCRIPTEN_LIB_DIR} ${BOOST_LINK_FLAGS} ${LASZIP_LIBRARY}")
+set_target_properties(PotreeConverter PROPERTIES LINK_FLAGS "--bind -s TOTAL_MEMORY=160MB -s LINKABLE=1 -O3 -I${BOOST_EMSCRIPTEN_INCLUDE_DIR} -L${BOOST_EMSCRIPTEN_LIB_DIR} ${BOOST_LINK_FLAGS} ${LASZIP_LIBRARY}")
 
 if(UNIX)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++14 -pthread -lstdc++ -lm")
-    target_link_libraries(PotreeConverter -lstdc++fs)
+    # target_link_libraries(PotreeConverter -lstdc++fs) using boost
 endif()
 
 install(TARGETS PotreeConverter RUNTIME DESTINATION bin/ )

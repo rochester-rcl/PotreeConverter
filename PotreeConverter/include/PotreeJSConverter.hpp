@@ -31,17 +31,17 @@ struct PotreeArguments {
 	vector<string> outputAttributes;
 	bool generatePage;
 	vector<double> aabbValues;
-	string pageName = "";
-	string projection = "";
-	bool sourceListingOnly = false;
-	string listOfFiles = "";
-	ConversionQuality conversionQuality = ConversionQuality::DEFAULT;
-	string conversionQualityString = "";
-	string title = "PotreeViewer";
-	string description = "";
-	bool edlEnabled = false;
-	bool showSkybox = false;
-	string material = "RGB";
+	string pageName;
+	string projection;
+	bool sourceListingOnly;
+	string listOfFiles;
+	ConversionQuality conversionQuality;
+	string conversionQualityString;
+	string title;
+	string description;
+	bool edlEnabled;
+	bool showSkybox;
+	string material;
   string executablePath;
 };
 
