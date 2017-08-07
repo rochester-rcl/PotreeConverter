@@ -50,7 +50,6 @@ set_target_properties(PotreeConverter PROPERTIES LINK_FLAGS "--bind -s TOTAL_MEM
 
 if(UNIX)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++14 -pthread -lstdc++ -lm")
-    # target_link_libraries(PotreeConverter -lstdc++fs) using boost
 endif()
 
 install(TARGETS PotreeConverter RUNTIME DESTINATION bin/ )
