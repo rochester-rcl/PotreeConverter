@@ -52,17 +52,24 @@ class PotreeJSConverter {
 
   public:
      // Can add all of the other options later + set this up as a worker
-     PotreeJSConverter(PotreeArguments arguments, bool runtime);
-		 bool nodeRuntime;
-		 bool getNodeRuntime() const { return nodeRuntime; };
-		 void setNodeRuntime(bool runtime) { nodeRuntime = runtime; };
+     PotreeJSConverter(PotreeArguments arguments);
+		 vector<int> totalPoints;
+		 long pointsProcessed;
+
+		 vector<int> getTotalPoints() const { return ptConverter.totalPoints; }
+		 void setTotalPoints(vector<int> points) { totalPoints = points; }
+
+		 long getPointsProcessed() const { return ptConverter.pointCount; }
+		 void setPointsProcessed(long points) { pointsProcessed = points; }
 		 void convert();
+
 };
 
 EMSCRIPTEN_BINDINGS(potree_js_converter) {
 
 	register_vector<string>("VectorString");
 	register_vector<double>("VectorDouble");
+	register_vector<int>("VectorInt");
 
 	enum_<StoreOption>("StoreOption")
 		.value("ABORT_IF_EXISTS", StoreOption::ABORT_IF_EXISTS)
@@ -80,9 +87,10 @@ EMSCRIPTEN_BINDINGS(potree_js_converter) {
 		.value("NICE", ConversionQuality::NICE);
 
   class_<PotreeJSConverter>("PotreeJSConverter")
-  	.constructor<PotreeArguments, bool>()
-		.property("nodeRuntime", &PotreeJSConverter::getNodeRuntime, &PotreeJSConverter::setNodeRuntime)
-		.function("convert", &PotreeJSConverter::convert);
+  	.constructor<PotreeArguments>()
+		.function("convert", &PotreeJSConverter::convert)
+		.property("totalPoints", &PotreeJSConverter::getTotalPoints, &PotreeJSConverter::setTotalPoints)
+		.property("pointsProcessed", &PotreeJSConverter::getPointsProcessed, &PotreeJSConverter::setPointsProcessed);
 
 	value_object<PotreeArguments>("PotreeArguments")
 		.field("source", &PotreeArguments::source)

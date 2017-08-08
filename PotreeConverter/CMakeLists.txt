@@ -6,6 +6,7 @@ set(CMAKE_VERBOSE_MAKEFILE on)
 set(BOOST_EMSCRIPTEN_INCLUDE_DIR $ENV{BOOST_PATH}/dist/emscripten/include)
 set(BOOST_EMSCRIPTEN_LIB_DIR $ENV{BOOST_PATH}/dist/emscripten/lib)
 set(BOOST_LINK_FLAGS "-lboost_system -lboost_filesystem")
+set(PRE_JS_PATH ${CMAKE_CURRENT_SOURCE_DIR}/resources/prepare-fs.js)
 set(CMAKE_STATIC_LIBRARY_SUFFIX ".bc")
 
 
@@ -46,7 +47,7 @@ SOURCE_GROUP("lib\\arguments" FILES ${lib_argument_files})
 add_executable(PotreeConverter ${files} ${lib_rapidjson_files} ${lib_argument_files})
 
 target_link_libraries(PotreeConverter ${LASZIP_LIBRARY})
-set_target_properties(PotreeConverter PROPERTIES LINK_FLAGS "--bind -s TOTAL_MEMORY=160MB -s LINKABLE=1 -O3 -I${BOOST_EMSCRIPTEN_INCLUDE_DIR} -L${BOOST_EMSCRIPTEN_LIB_DIR} ${BOOST_LINK_FLAGS} ${LASZIP_LIBRARY}")
+set_target_properties(PotreeConverter PROPERTIES LINK_FLAGS "--bind -s TOTAL_MEMORY=160MB --pre-js ${PRE_JS_PATH} -s LINKABLE=1 -O3 -I${BOOST_EMSCRIPTEN_INCLUDE_DIR} -L${BOOST_EMSCRIPTEN_LIB_DIR} ${BOOST_LINK_FLAGS} ${LASZIP_LIBRARY}")
 
 if(UNIX)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++14 -pthread -lstdc++ -lm")

@@ -78,7 +78,7 @@ PointReader *PotreeConverter::createPointReader(string path, PointAttributes poi
 }
 
 PotreeConverter::PotreeConverter(string executablePath, string workDir, vector<string> sources){
-    this->executablePath = executablePath;
+  this->executablePath = executablePath;
 	this->workDir = workDir;
 	this->sources = sources;
 }
@@ -458,13 +458,14 @@ void PotreeConverter::convert(){
 	writer->close();
 
 	writeSources(this->workDir + "/sources.json", sourceFilenames, numPoints, boundingBoxes, this->projection);
+	totalPoints = numPoints;
+	pointCount = pointsProcessed;
 
 	float percent = (float)writer->numAccepted / (float)pointsProcessed;
 	percent = percent * 100;
 
 	auto end = high_resolution_clock::now();
 	long long duration = duration_cast<milliseconds>(end-start).count();
-
 
 	cout << endl;
 	cout << "conversion finished" << endl;
