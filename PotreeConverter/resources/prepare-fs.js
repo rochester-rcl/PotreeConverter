@@ -11,3 +11,7 @@ Module['mountWORKERFS'] = function(virtualRoot, file) {
     files: [file],
   }, virtualRoot );
 };
+
+Module['onRuntimeInitialized'] = function() {
+  return true;
+}

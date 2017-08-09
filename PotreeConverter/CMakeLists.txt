@@ -44,13 +44,17 @@ list(REMOVE_ITEM files ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp)
 SOURCE_GROUP("lib\\rapidjson" FILES ${lib_rapidjson_files})
 SOURCE_GROUP("lib\\arguments" FILES ${lib_argument_files})
 
-add_executable(PotreeConverter ${files} ${lib_rapidjson_files} ${lib_argument_files})
+add_executable(PotreeConverterASM ${files} ${lib_rapidjson_files} ${lib_argument_files})
+add_executable(PotreeConverterWASM ${files} ${lib_rapidjson_files} ${lib_argument_files})
 
-target_link_libraries(PotreeConverter ${LASZIP_LIBRARY})
-set_target_properties(PotreeConverter PROPERTIES LINK_FLAGS "--bind -s TOTAL_MEMORY=160MB --pre-js ${PRE_JS_PATH} -s LINKABLE=1 -O3 -I${BOOST_EMSCRIPTEN_INCLUDE_DIR} -L${BOOST_EMSCRIPTEN_LIB_DIR} ${BOOST_LINK_FLAGS} ${LASZIP_LIBRARY}")
+target_link_libraries(PotreeConverterASM ${LASZIP_LIBRARY})
+target_link_libraries(PotreeConverterWASM ${LASZIP_LIBRARY})
 
+set_target_properties(PotreeConverterASM PROPERTIES LINK_FLAGS "--bind -s TOTAL_MEMORY=160MB -s MODULARIZE=1 --pre-js ${PRE_JS_PATH} -s LINKABLE=1 -O3 -I${BOOST_EMSCRIPTEN_INCLUDE_DIR} -L${BOOST_EMSCRIPTEN_LIB_DIR} ${BOOST_LINK_FLAGS} ${LASZIP_LIBRARY}")
+set_target_properties(PotreeConverterWASM PROPERTIES LINK_FLAGS "--bind -s TOTAL_MEMORY=160MB  -s BINARYEN=1 -s MODULARIZE=1 --pre-js ${PRE_JS_PATH} -s LINKABLE=1 -O3 -I${BOOST_EMSCRIPTEN_INCLUDE_DIR} -L${BOOST_EMSCRIPTEN_LIB_DIR} ${BOOST_LINK_FLAGS} ${LASZIP_LIBRARY}")
 if(UNIX)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++14 -pthread -lstdc++ -lm")
 endif()
 
-install(TARGETS PotreeConverter RUNTIME DESTINATION bin/ )
+install(TARGETS PotreeConverterASM RUNTIME DESTINATION bin/ )
+install(TARGETS PotreeConverterWASM RUNTIME DESTINATION bin/ )
