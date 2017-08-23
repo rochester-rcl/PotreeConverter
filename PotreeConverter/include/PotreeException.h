@@ -9,7 +9,7 @@
 
 using std::exception;
 using std::string;
-
+using std::cout;
 namespace Potree{
 
 class PotreeException: public exception{
@@ -22,9 +22,10 @@ public:
 	}
 
 	virtual ~PotreeException() throw(){
+		
 	}
-	
-	virtual const char* what() const throw(){    
+
+	virtual const char* what() const throw(){
 		return message.c_str();
 	}
 };

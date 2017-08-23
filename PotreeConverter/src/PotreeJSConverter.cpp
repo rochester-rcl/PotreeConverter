@@ -3,6 +3,7 @@
 #include <emscripten.h>
 #include "PotreeJSConverter.hpp"
 #include "PotreeConverter.h"
+#include "PotreeException.h";
 
 
 PotreeJSConverter::PotreeJSConverter(PotreeArguments arguments)
@@ -32,5 +33,5 @@ PotreeJSConverter::PotreeJSConverter(PotreeArguments arguments)
 };
 
 void PotreeJSConverter::convert() {
-  ptConverter.convert();
+    ptConverter.convert();
 }

@@ -51,7 +51,7 @@ target_link_libraries(PotreeConverterASM ${LASZIP_LIBRARY})
 target_link_libraries(PotreeConverterWASM ${LASZIP_LIBRARY})
 
 set_target_properties(PotreeConverterASM PROPERTIES LINK_FLAGS "--bind -s TOTAL_MEMORY=160MB -s MODULARIZE=1 --pre-js ${PRE_JS_PATH} -s LINKABLE=1 -O3 -I${BOOST_EMSCRIPTEN_INCLUDE_DIR} -L${BOOST_EMSCRIPTEN_LIB_DIR} ${BOOST_LINK_FLAGS} ${LASZIP_LIBRARY}")
-set_target_properties(PotreeConverterWASM PROPERTIES LINK_FLAGS "--bind -s TOTAL_MEMORY=160MB  -s BINARYEN=1 -s MODULARIZE=1 --pre-js ${PRE_JS_PATH} -s LINKABLE=1 -O3 -I${BOOST_EMSCRIPTEN_INCLUDE_DIR} -L${BOOST_EMSCRIPTEN_LIB_DIR} ${BOOST_LINK_FLAGS} ${LASZIP_LIBRARY}")
+set_target_properties(PotreeConverterWASM PROPERTIES LINK_FLAGS "--bind --preload-file ${CMAKE_CURRENT_SOURCE_DIR}/resources --exclude-file page_template/libs --exclude-file prepare-fs.js -s DISABLE_EXCEPTION_CATCHING=0 -s EXCEPTION_DEBUG=1 -s TOTAL_MEMORY=160MB  -s BINARYEN=1 -s MODULARIZE=1 --pre-js ${PRE_JS_PATH} -O3 -s LINKABLE=1 -I${BOOST_EMSCRIPTEN_INCLUDE_DIR} -L${BOOST_EMSCRIPTEN_LIB_DIR} ${BOOST_LINK_FLAGS} ${LASZIP_LIBRARY}")
 if(UNIX)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++14 -pthread -lstdc++ -lm")
 endif()
