@@ -150,17 +150,15 @@ AABB PotreeConverter::calculateAABB(){
 }
 
 void PotreeConverter::generatePage(string name){
-
 	string pagedir = this->workDir;
-    string templateSourcePath = this->executablePath + "/resources/page_template/viewer_template.html";
-    string mapTemplateSourcePath = this->executablePath + "/resources/page_template/lasmap_template.html";
+  string templateSourcePath = this->executablePath + "/resources/page_template/viewer_template.html";
+  string mapTemplateSourcePath = this->executablePath + "/resources/page_template/lasmap_template.html";
 	string templateTargetPath = pagedir + "/" + name + ".html";
 	string mapTemplateTargetPath = pagedir + "/lasmap_" + name + ".html";
 
-    Potree::copyDir(fs::path(this->executablePath + "/resources/page_template"), fs::path(pagedir));
+  Potree::copyDir(fs::path(this->executablePath + "/resources/page_template"), fs::path(pagedir));
 	fs::remove(pagedir + "/viewer_template.html");
 	fs::remove(pagedir + "/lasmap_template.html");
-
 	if(!this->sourceListingOnly){ // change viewer template
 		ifstream in( templateSourcePath );
 		ofstream out( templateTargetPath );
@@ -410,7 +408,6 @@ void PotreeConverter::convert(){
 			pointsProcessed++;
 			Point p = reader->getPoint();
 			writer->add(p);
-
 			if((pointsProcessed % (1'000'000)) == 0){
 				writer->processStore();
 				writer->waitUntilProcessed();

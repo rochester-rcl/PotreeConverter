@@ -1,5 +1,3 @@
-
-var Module = {};
 Module['mountNODEFS'] = function(virtualRoot) {
   FS.mkdir(virtualRoot);
   FS.mount(NODEFS, { root: '.' }, virtualRoot);
@@ -11,6 +9,10 @@ Module['mountWORKERFS'] = function(virtualRoot, file) {
     files: [file],
   }, virtualRoot );
 };
+
+Module['ls'] = function(path) {
+  return FS.readdir(path);
+}
 
 Module['onRuntimeInitialized'] = function() {
   return true;

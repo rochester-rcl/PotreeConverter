@@ -522,7 +522,6 @@ void PotreeWriter::add(Point &p){
 	if(numAdded == 0){
 		fs::path dataDir(workDir + "/data");
 		fs::path tempDir(workDir + "/temp");
-
 		fs::create_directories(dataDir);
 		fs::create_directories(tempDir);
 	}
