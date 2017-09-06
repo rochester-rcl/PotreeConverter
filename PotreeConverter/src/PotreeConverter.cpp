@@ -410,7 +410,7 @@ void PotreeConverter::convert(){
 			writer->add(p);
 			if((pointsProcessed % (1'000'000)) == 0){
 				writer->processStore();
-				writer->waitUntilProcessed();
+				//writer->waitUntilProcessed();
 
 				auto end = high_resolution_clock::now();
 				long long duration = duration_cast<milliseconds>(end-start).count();

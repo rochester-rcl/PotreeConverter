@@ -120,7 +120,6 @@ PointWriter *PWNode::createWriter(string path){
 }
 
 void PWNode::loadFromDisk(){
-
 	PointReader *reader = createReader(workDir() + "/data/" + path());
 	while(reader->readNextPoint()){
 		Point p = reader->getPoint();

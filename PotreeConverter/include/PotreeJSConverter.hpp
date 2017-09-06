@@ -62,6 +62,7 @@ class PotreeJSConverter {
 		 long getPointsProcessed() const { return ptConverter.pointCount; }
 		 void setPointsProcessed(long points) { pointsProcessed = points; }
 		 void convert();
+		 void compress(string srcPath, string zipName);
 
 };
 
@@ -89,6 +90,7 @@ EMSCRIPTEN_BINDINGS(potree_js_converter) {
   class_<PotreeJSConverter>("PotreeJSConverter")
   	.constructor<PotreeArguments>()
 		.function("convert", &PotreeJSConverter::convert)
+		.function("compress", &PotreeJSConverter::compress)
 		.property("totalPoints", &PotreeJSConverter::getTotalPoints, &PotreeJSConverter::setTotalPoints)
 		.property("pointsProcessed", &PotreeJSConverter::getPointsProcessed, &PotreeJSConverter::setPointsProcessed);
 

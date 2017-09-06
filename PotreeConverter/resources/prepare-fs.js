@@ -5,6 +5,7 @@ Module['mountNODEFS'] = function(virtualRoot) {
 
 Module['mountWORKERFS'] = function(virtualRoot, file) {
   FS.mkdir(virtualRoot);
+  FS.mkdir('/archive');
   FS.mount(WORKERFS, {
     files: [file],
   }, virtualRoot );
@@ -12,6 +13,10 @@ Module['mountWORKERFS'] = function(virtualRoot, file) {
 
 Module['ls'] = function(path) {
   return FS.readdir(path);
+}
+
+Module['lookup'] = function(path) {
+  return FS.lookupPath(path);
 }
 
 Module['onRuntimeInitialized'] = function() {
