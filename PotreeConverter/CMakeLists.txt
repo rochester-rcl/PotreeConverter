@@ -45,27 +45,42 @@ list(REMOVE_ITEM files ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp)
 SOURCE_GROUP("lib\\rapidjson" FILES ${lib_rapidjson_files})
 SOURCE_GROUP("lib\\arguments" FILES ${lib_argument_files})
 
-add_executable(PotreeConverterASM ${files} ${lib_rapidjson_files} ${lib_argument_files})
-add_executable(PotreeConverterWASM ${files} ${lib_rapidjson_files} ${lib_argument_files})
+if (NOT ${POTREE_TARGET} STREQUAL "")
+	if (${POTREE_TARGET} STREQUAL "WASM_NODE")
+		message(STATUS "nodejs wasm target will be built")
+		set(POTREE_BUILD_TARGET "PotreeConverterNode")
+		add_executable(PotreeConverterNode ${files} ${lib_rapidjson_files} ${lib_argument_files})
+		target_link_libraries(PotreeConverterNode ${LASZIP_LIBRARY})
+		set_target_properties(PotreeConverterNode PROPERTIES LINK_FLAGS "--bind \
+			-s ALLOW_MEMORY_GROWTH=1 -s BINARYEN=1 -s MODULARIZE=1 --post-js  \
+			${PRE_JS_PATH} -s USE_ZLIB=1 -O3 -s LINKABLE=1 -I${BOOST_EMSCRIPTEN_INCLUDE_DIR} \
+			-L${BOOST_EMSCRIPTEN_LIB_DIR} ${BOOST_LINK_FLAGS} ${LASZIP_LIBRARY} ${LIBZIP_LIB}")
 
-target_link_libraries(PotreeConverterASM ${LASZIP_LIBRARY})
-target_link_libraries(PotreeConverterWASM ${LASZIP_LIBRARY})
+	elseif (${POTREE_TARGET} STREQUAL "WASM_BROWSER")
+		message(STATUS "web browser wasm target will be built")
+		set(POTREE_BUILD_TARGET "PotreeConverterWASM")
+		add_executable(PotreeConverterWASM ${files} ${lib_rapidjson_files} ${lib_argument_files})
+		target_link_libraries(PotreeConverterWASM ${LASZIP_LIBRARY})
+		set_target_properties(PotreeConverterWASM PROPERTIES LINK_FLAGS "--bind \
+		 	--preload-file ${CMAKE_CURRENT_SOURCE_DIR}/resources@/resources \
+			--exclude-file ${CMAKE_CURRENT_SOURCE_DIR}/resources/prepare-fs.js \
+			-s ALLOW_MEMORY_GROWTH=1 -s BINARYEN=1 -s MODULARIZE=1 --post-js  \
+			${PRE_JS_PATH} -s USE_ZLIB=1 -O3 -s LINKABLE=1 -I${BOOST_EMSCRIPTEN_INCLUDE_DIR} \
+			-L${BOOST_EMSCRIPTEN_LIB_DIR} ${BOOST_LINK_FLAGS} ${LASZIP_LIBRARY} ${LIBZIP_LIB}")
 
-set_target_properties(PotreeConverterASM PROPERTIES LINK_FLAGS "--bind \
-	-s ALLOW_MEMORY_GROWTH=1 -s MODULARIZE=1 --post-js ${PRE_JS_PATH} \
-	-s LINKABLE=1 -s USE_ZLIB=1 -O3 -I${BOOST_EMSCRIPTEN_INCLUDE_DIR} \
-	-L${BOOST_EMSCRIPTEN_LIB_DIR} ${BOOST_LINK_FLAGS} ${LASZIP_LIBRARY} ${LIBZIP_LIB}")
-
-set_target_properties(PotreeConverterWASM PROPERTIES LINK_FLAGS "--bind \
- 	--preload-file ${CMAKE_CURRENT_SOURCE_DIR}/resources@/resources \
-	--exclude-file ${CMAKE_CURRENT_SOURCE_DIR}/resources/prepare-fs.js \
-	-s ALLOW_MEMORY_GROWTH=1 -s BINARYEN=1 -s MODULARIZE=1 --post-js  \
-	${PRE_JS_PATH} -s USE_ZLIB=1 -O3 -s LINKABLE=1 -I${BOOST_EMSCRIPTEN_INCLUDE_DIR} \
-	-L${BOOST_EMSCRIPTEN_LIB_DIR} ${BOOST_LINK_FLAGS} ${LASZIP_LIBRARY} ${LIBZIP_LIB}")
-
-if(UNIX)
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++14 -pthread -lstdc++ -lm")
+	elseif (${POTREE_TARGET} STREQUAL "ASM")
+		message(STATUS "asm.js target will be built")
+		set(POTREE_BUILD_TARGET "PotreeConverterASM")
+		set_target_properties(PotreeConverterASM PROPERTIES LINK_FLAGS "--bind \
+			-s ALLOW_MEMORY_GROWTH=1 -s MODULARIZE=1 --memory-init-file 0 --post-js ${PRE_JS_PATH} \
+			-s LINKABLE=1 -s USE_ZLIB=1 -O3 -I${BOOST_EMSCRIPTEN_INCLUDE_DIR} \
+			-L${BOOST_EMSCRIPTEN_LIB_DIR} ${BOOST_LINK_FLAGS} ${LASZIP_LIBRARY} ${LIBZIP_LIB}")
+	endif()
+else()
+	message(FATAL_ERROR "A build target (-DPOTREE_TARGET) of either WASM_NODE, WASM_BROWSER, ASM_NODE, or ASM_BROWSER must be specified!")
 endif()
 
-install(TARGETS PotreeConverterASM RUNTIME DESTINATION bin/ )
-install(TARGETS PotreeConverterWASM RUNTIME DESTINATION bin/ )
+if(UNIX)
+		 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++14 -pthread -lstdc++ -lm")
+endif()
+install(TARGETS ${POTREE_BUILD_TARGET} RUNTIME DESTINATION bin/ )

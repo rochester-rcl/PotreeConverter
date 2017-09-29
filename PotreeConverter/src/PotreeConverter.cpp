@@ -426,7 +426,7 @@ void PotreeConverter::convert(){
 
 				cout << ssMessage.str() << endl;
 			}
-			if((pointsProcessed % (10'000'000)) == 0){
+			if((pointsProcessed % (100'000'000)) == 0){
 				cout << "FLUSHING: ";
 
 				auto start = high_resolution_clock::now();

@@ -81,6 +81,7 @@ string PWNode::hierarchyPath(){
 	string indices = name().substr(1);
 
 	int numParts = (int)floor((float)indices.size() / (float)hierarchyStepSize);
+
 	for(int i = 0; i < numParts; i++){
 		path += indices.substr(i * hierarchyStepSize, hierarchyStepSize) + "/";
 	}
@@ -275,9 +276,9 @@ PWNode *PWNode::add(Point &point){
 }
 
 void PWNode::flush(){
-
 	std::function<void(vector<Point> &points, bool append)> writeToDisk = [&](vector<Point> &points, bool append){
 		string filepath = workDir() + "/data/" + path();
+		
 		PointWriter *writer = NULL;
 
 		if(!fs::exists(workDir() + "/data/" + hierarchyPath())){
